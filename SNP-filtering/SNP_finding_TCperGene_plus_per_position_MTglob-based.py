@@ -16,6 +16,8 @@ import numpy as np
 
 ## this converts all lowercase letters in the reference to uppercase, not sure if this is a good idea
 
+## it can now also be used with and without a SNP file
+
 
 if len(sys.argv) == 5:
     ifn = sys.argv[1]
@@ -23,22 +25,25 @@ if len(sys.argv) == 5:
     snp_file = sys.argv[3]
     cutoff_rate = int(sys.argv[4])/100
 else:
-    print("Please provide me with an input .bam file to find mutations in, a minimum quality score for said mutations and a file containing known SNP positions and a cutoff rate for SNPs.")
+    print("Please provide me with an input .bam file to find mutations in, a minimum quality score for said mutations and a file containing known SNP positions and a cutoff rate for SNPs, if you want to filter out some positions. Otherwise type N and 101 as the last two arguments.")
     sys.exit()
 
 ## read in SNP file and create a set
 snp_set = []
-with open(snp_file, "r") as snps:
-    next(snps)
-    for line in snps:
-        lin = line.rstrip().split("\t")
-        #allowing only those positions in that have a TC rate over the desired cutoff rate
-        if int(lin[2]) > 0:
-            if int(lin[2]) / int(lin[1]) >= cutoff_rate:
-                snp_set.append(lin[0])
-                    #pdb.set_trace()
+if snp_file != "N":
+    with open(snp_file, "r") as snps:
+        next(snps)
+        for line in snps:
+            lin = line.rstrip().split("\t")
+            #allowing only those positions in that have a TC rate over the desired cutoff rate
+            if int(lin[2]) > 0:
+                if int(lin[2]) / int(lin[1]) >= cutoff_rate:
+                    snp_set.append(lin[0])
+else:
+    snp_set = ["0"]
+                        #pdb.set_trace()
     #to speed up membership tests
-    snp_set = set(snp_set)
+snp_set = set(snp_set)
 
 
 samfile = pysam.AlignmentFile(ifn, "rb")
