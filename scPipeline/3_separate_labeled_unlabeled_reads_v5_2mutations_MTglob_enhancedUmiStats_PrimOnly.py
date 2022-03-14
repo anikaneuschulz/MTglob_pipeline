@@ -81,9 +81,10 @@ for read in samfile.fetch():
             UB = read.get_tag("UB")
             identifier = CB + "_" + UB + "_" + gene
             MT = read.get_tag("MT")
-            TotalContent = read.get_tag("TC").rstrip().split(";")
+            TotalContent = read.get_tag("TC")
             if read.is_reverse:
                 TotalContent = TotalContent.translate(tab)[::1]
+            TotalContent = TotalContent.rstrip().split(";")
             for i in range(0,4):
                 TotalContent[i] = int(TotalContent[i][1:])
             #pdb.set_trace()
