@@ -24,7 +24,7 @@ Only ```pysam``` needs to be installed, the others should come with your python 
 
 ```pandas``` and ```numpy``` are not strictly necessary for this particular workflow, but do appear in various analysis scripts that may or may not be used later on. They can be skipped here if desired.
 
-have a vaguely recent version of samtools installed (via conda or otherwise, v. 1.14 tested)
+Also have a vaguely recent version of ```samtools``` installed (via conda or otherwise, v. 1.14 tested)
 
 **1. map** with cellranger similar to this (cellranger 6.1.1 tested):
 ```
