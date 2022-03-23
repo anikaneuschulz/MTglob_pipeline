@@ -3,6 +3,8 @@ How to analyse single cell SLAMseq data (as of 23.03.2022)
 
 **--> global MT tag version**
 
+*this readme only applies to the content of the ```scPipeline``` folder*
+
 **0. setting up:**
 
 make sure to have a conda environment (if desired, python 3.8 tested) and the following packages in working order:
