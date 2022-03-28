@@ -71,7 +71,7 @@ for read in bamfile.fetch():
                 else:
                     if not UB in count_dict[CB_index][GN_index]:
                         count_dict[CB_index][GN_index].append(UB)
-                        nonempty_cells+=1
+                        #nonempty_cells+=1 ## seriously hope commenting this out fixes the "ColSum of row 3 instead of nonempty cells" issue in the matrix
 
 sys.stdout.write("\nwriting...\n")
 current_time = time.strftime("%H:%M:%S", time.localtime())
