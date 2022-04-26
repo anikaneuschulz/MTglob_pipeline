@@ -48,7 +48,7 @@ snp_set = set(snp_set)
 
 samfile = pysam.AlignmentFile(ifn, "rb")
 #ofn_coverage = ifn[:-4] + "_coverage_per_gene_TC-Q" + str(qual_thr) + "_SNPs.tsv"
-ofn_coverage_T_pos = ifn[:-4] + "_coverage_per_T position_TC-Q" + str(qual_thr) + "_SNPs.tsv"
+ofn_coverage_T_pos = ifn[:-4] + "_coverage_per_T-position_TC-Q" + str(qual_thr) + "_SNPs.tsv"
 ofn_meanMedian_per_gene = ifn[:-4] + "_mean_median_cov_TC_per_gene-Q" + str(qual_thr) + "_SNPs.tsv"
 #ofn_genes_positions = ifn[:-4] + "_genes_positions.tsv"
 
