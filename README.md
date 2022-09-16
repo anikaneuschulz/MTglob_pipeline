@@ -3,7 +3,7 @@ How to analyse single cell SLAMseq data (as of 23.03.2022)
 
 **--> global MT tag version**
 
-*this readme only applies to the content of the ```scPipeline``` folder*
+*this readme mainly applies to the content of the ```scPipeline``` folder*
 
 **0. setting up:**
 
@@ -35,6 +35,10 @@ Also have a vaguely recent version of ```samtools``` installed (via conda or oth
 --sample=<sample name from demultiplexing>
 --localcores=<20 to 40>
 ```
+
+Mapping with STARsolo also works, make sure to add gene identifiers using e.g. Rsubread if your run of STAR does not produce them. Supported tags are GN/GX (cellranger-style) or XT (Script in 5.1 only). Adding the MD tag can be skipped if the STARsolo run already added it.
+
+STAR-mapped bulk data with MD tag present can be processed using Steps 4 & 6 for a bulk mutation rate. Bulk mutation rates per gene can be calculated using the scripts in ```mutations_per_gene/*``` based on the format of your gene tag (GN and XT are currently supported). A SNP-aware version (see 5.1 for requirements) is located in ```SNP-filtering/mutation_eff_per_gene_v4_XT-tag_MTglob_SNPs_v4.py``` for XT-tags only.
 
 **2. extract actual cells** (as detected by cellranger) if desired. Can be skipped if cellranger is not to be trusted on your data
 
@@ -71,6 +75,22 @@ python \
  possorted_genome_bam_actual_cells_MD_MTglob.bam <mutation sequencing quality> <number of mutations per UMI>
  ```
 This will generate 3 .bam files, one that has all UMIs that satisfy the 'labelled' criteria, one with entirely unlabelled UMIs and the third one with unclear cases that appear when more that 1 mutation per UMI is required in order to determine it to be labelled.
+
+**5.1**
+
+SNP-filtering:
+
+the above script does not filter for potential SNP positions. If you want to filter some positions there is an alternative script available in ```SNP-filtering/3_separate_labeled_unlabeled_reads_v5_2mutations_MTglob_enhancedUmiStats_PrimOnly_SNPs.py```
+that takes an additional file with positions to be filtered as an argument. You will also need to chose the minimum coverage for a position to be considered labelled and the maximum percentage of allowed T to C events before it is considered a SNP. E.g. a position for valid labelling events needs to have a minimum coverage of 10 with no more than 25% TtoC. Positions that have less coverage or a higher fraction of TtoC will be considered unlabelled.
+Output files created will be similar to point **5**, but note the TtoC fraction cutoff in the file name as well.
+
+The SNP-file needs to be in the following format:
+```<chromosome>:<position>\t<coverage>\t<number of TtoC>```
+It should contain one line for each position covered by your dataset.
+
+You can e.g. generate one using
+```SNP-filtering/SNP_finding_TCperGene_plus_per_position_MTglob-based.py```
+The file will end in **coverage_per_T-position_TC-Q20_SNPs.tsv*
 
 **6. calculate bulk mutation rates:**
 

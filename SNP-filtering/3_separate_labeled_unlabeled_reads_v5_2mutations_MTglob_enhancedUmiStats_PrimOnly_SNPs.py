@@ -54,9 +54,9 @@ scriptdir = "/".join(scriptpath.split("/")[:-1])
 
 
 
-ofn_l = ifn[:-4] + "_labeled_Q" + str(qual_thr) + "_" + str(nmutations) + "mutations_PrimOnly.bam"
-ofn_ml = ifn[:-4] + "_maybe-labeled_Q" + str(qual_thr) + "_" + str(nmutations) + "mutations_PrimOnly.bam"
-ofn_ul = ifn[:-4] + "_unlabeled_Q" + str(qual_thr) + "_" + str(nmutations) + "mutations_PrimOnly.bam"
+ofn_l = ifn[:-4] + "_labeled_Q" + str(qual_thr) + "_" + str(nmutations) + "mutations_PrimOnly" + "_SNP-corrected_TtoC-filter_" + str(cutoff_rate) + ".bam"
+ofn_ml = ifn[:-4] + "_maybe-labeled_Q" + str(qual_thr) + "_" + str(nmutations) + "mutations_PrimOnly" + "_SNP-corrected_TtoC-filter_" + str(cutoff_rate) + ".bam"
+ofn_ul = ifn[:-4] + "_unlabeled_Q" + str(qual_thr) + "_" + str(nmutations) + "mutations_PrimOnly" + "_SNP-corrected_TtoC-filter_" + str(cutoff_rate) + ".bam"
 
 samfile = pysam.AlignmentFile(ifn, "rb")
 
@@ -87,8 +87,6 @@ labeledreads = pysam.AlignmentFile(ofn_l, "wb", template=samfile)
 unlabeledreads = pysam.AlignmentFile(ofn_ul, "wb", template=samfile)
 maybelabeledreads = pysam.AlignmentFile(ofn_ml, "wb", template=samfile)
 
-#reads_processed = 0
-#sys.stdout.write(str(reads_processed) + " reads processed")
 
 labeled_dict = {}
 umi_dict = {}
@@ -121,7 +119,6 @@ for read in samfile.fetch():
             TotalContent = TotalContent.rstrip().split(";")
             for i in range(0,4):
                 TotalContent[i] = int(TotalContent[i][1:])
-            #pdb.set_trace()
 
             #remove ID reads here
             if MT == "0-ID":
@@ -133,7 +130,6 @@ for read in samfile.fetch():
                 labeled_dict[identifier] = 0
 
             #this is where we collect all readsnames from a umi
-            #pdb.set_trace()
             if not identifier in umi_dict:
                 umi_dict[identifier] = [read.query_name]
             else:
@@ -159,8 +155,6 @@ for read in samfile.fetch():
                 passed = 0
                 for mutation in mutations:
                     split_mutation = mutation.split("-")
-                    #pdb.set_trace()
-                    #position = int(int(split_mutation[0].split(':')[1]) - int(read.reference_start))
                     if split_mutation[1] == label:
                         if int(split_mutation[2]) >= qual_thr and not split_mutation[0] in snp_set:
                             passed+=1

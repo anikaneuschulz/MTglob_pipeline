@@ -21,7 +21,7 @@ import numpy as np
 ## it now has variable tag format (CR or STAR/Rsubread style)
 
 
-if len(sys.argv) == 5:
+if len(sys.argv) == 6:
     ifn = sys.argv[1]
     qual_thr = int(sys.argv[2])
     snp_file = sys.argv[3]
