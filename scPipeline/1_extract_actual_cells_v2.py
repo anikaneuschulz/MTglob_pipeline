@@ -41,7 +41,8 @@ if mapper == "Y":
             if read.get_tag("CB")[:-2] in cell_barcodes:
                 reads_out.write(read)
                 reads_written+=1
-                sys.stdout.write('\r' + str(reads_written) + ' reads written.')
+                if reads_written % 10000 == 0:
+                    sys.stdout.write("\r" + str(reads_written) + ' reads written.')
         except KeyError:
                 #this catches reads with barcodes that could not be matched to a valid barcode
             pass
@@ -51,7 +52,8 @@ else:
             if read.get_tag("CB") in cell_barcodes:
                 reads_out.write(read)
                 reads_written+=1
-                sys.stdout.write('\r' + str(reads_written) + ' reads written.')
+                if reads_written % 10000 == 0:
+                    sys.stdout.write("\r" + str(reads_written) + ' reads written.')
         except KeyError:
             #this catches reads with barcodes that could not be matched to a valid barcode
                 pass

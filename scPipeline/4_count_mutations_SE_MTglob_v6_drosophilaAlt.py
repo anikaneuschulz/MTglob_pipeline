@@ -82,7 +82,7 @@ for read in bamfile.fetch():
             countA+= sequence.count("T")
             countG+= sequence.count("C")
             countC+= sequence.count("C")
-        mutations = read.get_tag("MT").split("_")
+        mutations = read.get_tag("MT").split("§")
         ## this is where we catch unmutated reads or insertions/deletions
         for mutation in mutations:
             if mutation == "0-XX" or mutation == "0-ID":

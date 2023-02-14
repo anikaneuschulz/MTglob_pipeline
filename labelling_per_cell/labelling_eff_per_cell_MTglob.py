@@ -23,7 +23,8 @@ print("collecting cells...")
 sys.stdout.write(str(reads_processed) + " reads processed")
 for read in bamfile:
     reads_processed+=1
-    sys.stdout.write("\r" + str(reads_processed) + " reads processed")
+    if reads_processed % 10000 == 0:
+        sys.stdout.write("\r" + str(reads_processed) + ' reads processed.')
     if read.has_tag("CB"):
         CB = read.get_tag("CB")
         if not CB in cell_dict:
