@@ -12,17 +12,17 @@ cb_file = sys.argv[2]
 
 bamfile = pysam.AlignmentFile(ifn, mode = "rb")
 
+sys.stdout.write("reading cell identities...\n")
+cb_ct = pd.read_csv(cb_file, sep = ",", header = None)
+cb_ct.columns = ["cb", "celltype"]
+cb_dict=dict(zip(cb_ct["cb"],cb_ct["celltype"]))
+
 sys.stdout.write("estimating file size...\n")
 linecount = int(str(check_output(["samtools", "view", "-c", ifn]).rstrip()).split("'")[1])
 reads_processed = 0
 sys.stdout.write("processing...\n")
 
 os.system("mkdir celltype_split")
-
-
-cb_ct = pd.read_csv(cb_file, sep = ",", header = None)
-cb_ct.columns = ["cb", "celltype"]
-cb_dict=dict(zip(cb_ct["cb"],cb_ct["celltype"]))
 
 # create/open handles
 handle_dict = {}

@@ -130,7 +130,8 @@ for read in samfile.fetch():
                             coverage_per_gene_dict[gene][glob_position][0]+=1
 
             except IndexError:
-                pdb.set_trace()
+                pass
+                #pdb.set_trace()
         MTtag = read.get_tag("MT").split("_")
         if not MTtag[0] == "0-XX":
             for mutation in MTtag:
@@ -141,7 +142,8 @@ for read in samfile.fetch():
                         coverage_per_T_position_dict[mutation[0]][1]+=1
                         coverage_per_gene_dict[gene][mutation[0]][1]+=1
                 except IndexError:
-                    pdb.set_trace()
+                    pass
+                    #pdb.set_trace()
 #pdb.set_trace()
 sys.stdout.write("\nwriting coverage per T position and TtoC mutations...\n")
 

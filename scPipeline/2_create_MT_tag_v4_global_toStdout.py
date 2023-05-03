@@ -9,7 +9,7 @@ from subprocess import check_output
 ## input has to be sorted and indexed
 # Author: Anika Neuschulz
 
-# this is finally fixing the issue with InDels that could not be processes properly and accurate SNP filtering will be made possible by having global genomic positions in the MTtag
+# this is finally fixing the issue with InDels that could not be processed properly and accurate SNP filtering will be made possible by having global genomic positions in the MTtag
 
 if len(sys.argv) == 2:
     ifn = sys.argv[1]
