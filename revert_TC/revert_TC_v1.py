@@ -21,7 +21,7 @@ bamfile = pysam.AlignmentFile(ifn, "rb")
 outfile = pysam.AlignmentFile(ofn, "wb", template=bamfile)
 
 
-## this is where we set up TG and TA counting - the backgroun TC rate is usually right between the two, so we can exploit that to estimate the nessesary mutation rate
+## this is where we set up TG and TA counting - the background TC rate is usually right between the two, so we can exploit that to estimate the nessesary mutation rate
 
 mutation_dict = {}
 mutation_dict["TA"] = 0
@@ -79,7 +79,6 @@ bg_mut_rate = (mutation_dict["TA"]/countT + mutation_dict["TG"]/countT) / 2
 sys.stdout.write("\n estimated background mutation rate: " + str(round(bg_mut_rate*100, 6)) + "%")
 
 ## reverting mutations, keeping the estimated background mutation rate in
-## TODO: checker for read orientation!!
 
 sys.stdout.write("\nreverting mutations...\n")
 
@@ -101,7 +100,13 @@ for read in bamfile.fetch():
         if mutation == "0-XX" or mutation == "0-ID":
             break
         split_mutation = mutation.split("-")
-        if split_mutation[1] == "TC":
+        if read.is_reverse:
+            label = "AG"
+            reversal = "A"
+        else:
+            label = "TC"
+            reversal = "T"
+        if split_mutation[1] == label:
             TC_in_contig_position = int(split_mutation[0].split(":")[1])
             ## shall we revert this one?
             if random.randrange(0, 10000, 1) > bg_mut_rate_scaled :
@@ -114,7 +119,7 @@ for read in bamfile.fetch():
                 TC_in_sequence_position = mapping_positions[TC_in_contig_position]
                 ## a little detour since strings can't be changed in python...
                 sequence_1 = list(sequence)
-                sequence_1[TC_in_sequence_position] = "T"
+                sequence_1[TC_in_sequence_position] = reversal
                 sequence = "".join(sequence_1)
                 tampered_with = True
     if tampered_with == True :
