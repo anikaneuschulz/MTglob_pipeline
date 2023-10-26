@@ -105,6 +105,7 @@ This generates one file that has total nucleotice counts (based on the reference
 
 
 **7. generate labelled / unlabelled count matrices**
+For smaller datasets:
 generate the count matrices directly from the .bam files based on a script based on one that was supplied with STARsolo 2.7.10a (STAR_2.7.10a/extras/scripts/soloCountMatrixFromBAM.awk)
 
 run
@@ -122,3 +123,53 @@ In case of Seurat analysis: feed said ```<desired matrix output folder>``` to se
 project.data <- Read10X(data.dir = "<desired matrix output folder>", gene.column=1)
 ```
 and proceed as normal
+
+*alternatively for bigger datasets (>60 Mio reads)*
+
+use HTseq to generate new count matrices, as it is much more time efficient.
+
+required packages: HTseq, numpy, samtools, scipy
+
+Make a matrix file (remove line breaks and comments!):
+
+```
+htseq-count-barcodes #calling HTseq from the command line
+--counts_output_sparse # make a sparse matrix
+-c matrix.mtx # call it matrix.mtx -> giving it a name is essential,
+# otherwise the output will not be stored
+--UMI UB #UMIs are in the UB tag -> adjust if needed
+--cell-barcode CB #cell barcodes are in the CB tag -> adjust if needed
+<your .bam file >
+<.gtf file used to make the genome the data was mapped with>
+```
+
+This step may take a while, especially when processing upwards of 500 Mio reads.
+
+In order to load the matrix into Seurat, proceed as follows:
+
+1. zip the matrix ```gzip matrix.mtx```
+
+2. open R and load the matrix ```matrix <- Matrix::readMM('<wherever/you/placed/it/matrix.mtx.gz>')```
+
+3. load the genes ```features <- read.csv("<wherever/you/placed/it/genes.tsv>", header = FALSE)```
+
+4. remove the first row in case it's the header, which we don't need: ```features <- as.data.frame(features[-c(1),])```
+
+5. add features to matrix ```colnames(matrix) <- features$(however your column containing ensmbl IDs is named)```
+
+6. add barcodes to matrix
+
+```
+barcodes <- read.csv("<wherever/you/placed/it/samples.tsv>", header = FALSE)
+rownames(matrix) <- barcodes$V1
+```
+
+7. load into Seurat:
+
+```
+#make a Seurat object - important: the matrix we made with htseq needs to be transposed
+#in order to fit Seurat requirements (CB as colnames instead of rownames) -> a quick t() does the job
+Seurat_object <- CreateSeuratObject(counts = t(matrix),
+min.cells = <min cells>, min.features = <min features>,
+project = "project_name")
+```
