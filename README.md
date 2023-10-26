@@ -108,7 +108,7 @@ This generates one file that has total nucleotice counts (based on the reference
 
 
 For smaller datasets:
-generate the count matrices directly from the .bam files based on a script based on one that was supplied with STARsolo 2.7.10a (STAR_2.7.10a/extras/scripts/soloCountMatrixFromBAM.awk)
+generate the count matrices directly from the .bam files based on a script that was supplied with STARsolo 2.7.10a (STAR_2.7.10a/extras/scripts/soloCountMatrixFromBAM.awk)
 
 run
 ```
