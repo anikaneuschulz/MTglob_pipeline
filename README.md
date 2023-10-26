@@ -63,6 +63,8 @@ python <script location>2_create_MT_tag_v4_global_toStdout.py possorted_genome_b
 catch the script's output as desired, instructions will appear automatically if the output is not piped.
 This guide assumes the output of Step 4 to be called *possorted_genome_bam_actual_cells_MD_MTglob.bam*
 
+If chromosome names in your genome of choice contain underscores, please use the _drosophilaAlt.py versions of script 2, 3 and 4. This is the case for drosphila as well as certain versions of **human genomes**.
+
 index the output
 ```
 samtools index possorted_genome_bam_actual_cells_MD_MTglob.bam
