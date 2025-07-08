@@ -30,7 +30,7 @@ Also have a vaguely recent version of ```samtools``` installed (via conda or oth
 ```
 <location/of/your/cellranger>/cellranger count
 --id=<name for the output folder>
---fastqs=/data/junker/runs/<folder with your fastqs>
+--fastqs=<folder with your fastqs>
 --transcriptome=<your transcriptome here>
 --sample=<sample name from demultiplexing>
 --localcores=<20 to 40>
