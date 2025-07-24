@@ -101,7 +101,7 @@ run
 python <script location>/4_count_mutations_SE_MTglob_v6.py \
 possorted_genome_bam_actual_cells_MD_MTglob.bam <mutation sequencing quality>
 ```
-This generates one file that has total nucleotice counts (based on the reference in case of substitutions) and one that has total mutation counts. Use to plot as desired.
+This generates one file that has total nucleotide counts (based on the reference in case of substitutions) and one that has total mutation counts. Use to plot as desired.
 
 
 **7. generate labelled / unlabelled count matrices**
@@ -126,7 +126,7 @@ project.data <- Read10X(data.dir = "<desired matrix output folder>", gene.column
 ```
 and proceed as normal
 
-*alternatively for bigger datasets (>60 Mio reads)*
+***alternatively for bigger datasets (>60 Mio reads)***
 
 use HTseq to generate new count matrices, as it is much more time efficient.
 
